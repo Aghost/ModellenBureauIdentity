@@ -1,0 +1,18 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    @if (User.IsInRole("Admin")) {
+        <a class="nav-link text-dark" asp-page="/Approvals">Approvals</a>
+    }
+
+    @foreach(var user in Model.modelUsers) {
+        @foreach(var photo in user.Photos) {
+<a asp-page="/Profile" asp-route-id="@user.Id"><img src="@photo.Path" alt="image" /></a>
+                }
+            }
+</div>

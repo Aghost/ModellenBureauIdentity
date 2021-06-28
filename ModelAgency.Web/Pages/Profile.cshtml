@@ -1,0 +1,21 @@
+﻿@page
+@model ModelAgency.Web.Pages.ProfileModel
+@inject UserManager<ModelAgency.Web.Data.Entities.ApplicationUser> userManager 
+@{
+    ViewData["Title"] = "Profile";
+}
+
+@if (User.IsInRole("Admin") || userManager.GetUserId(User) == Model.modelUser.Id) {
+<a asp-page="/EditProfile" asp-route-id="@Model.modelUser.Id">Edit</a>
+}
+<div>
+    <label asp-for="modelUser.Name"></label>
+    @Model.modelUser.Name
+</div>
+<div>
+    <label asp-for="modelUser.DOB"></label>
+    @Model.modelUser.DOB.ToShortDateString()
+</div>
+@foreach (var photo in Model.modelUser.Photos) {
+                <img src="@photo.Path" alt="photo"/>
+}
