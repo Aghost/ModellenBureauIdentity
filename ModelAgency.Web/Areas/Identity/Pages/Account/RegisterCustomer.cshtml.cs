@@ -73,13 +73,10 @@ namespace ModelAgency.Web.Areas.Identity.Pages.Account
             public string StreetAddress { get; set; }
             public string PostalCode { get; set; }
             public string Country { get; set; }
-            public string KvK { get; set; }
             public string BTW { get; set; }
-            public IFormFile Logo { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
-        {
+        public async Task OnGetAsync(string returnUrl = null) {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -90,15 +87,6 @@ namespace ModelAgency.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var relativedir = Path.Combine("img", "customers", Input.Name);
-                var dir = Path.Combine(webHost.WebRootPath, relativedir);
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                var relative = Path.Combine(relativedir, Input.Logo.FileName);
-                var path = Path.Combine(webHost.WebRootPath, relative);
-                using(var file = System.IO.File.Create(path)) {
-                    Input.Logo.CopyTo(file);
-                }
                 var user = new CustomerUser {
                     UserName = Input.Email,
                     Email = Input.Email,
@@ -106,9 +94,10 @@ namespace ModelAgency.Web.Areas.Identity.Pages.Account
                     PostalCode = Input.PostalCode,
                     Country = Input.Country
                 };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
-                {
+
+                if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
 
                     await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Customer"));
@@ -119,28 +108,24 @@ namespace ModelAgency.Web.Areas.Identity.Pages.Account
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                        protocol: Request.Scheme
+                    );
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
+                    if (_userManager.Options.SignIn.RequireConfirmedAccount) {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
+                    } else {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
-                {
+                foreach (var error in result.Errors) {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }
