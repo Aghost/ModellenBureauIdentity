@@ -28,7 +28,7 @@ namespace ModelAgency.Web.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterCustomerModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IWebHostEnvironment webHost;
+        private readonly IWebHostEnvironment _webHost;
 
         public RegisterCustomerModel(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +41,7 @@ namespace ModelAgency.Web.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            this.webHost = webHost;
+            _webHost = webHost;
         }
 
         [BindProperty]

@@ -3,17 +3,25 @@
 @inject SignInManager<ModelAgency.Web.Data.Entities.ApplicationUser> SignInManager
 @inject UserManager<ModelAgency.Web.Data.Entities.ApplicationUser> UserManager
 
-@if (User.Identity.IsAuthenticated) {
+<div style="background-color: midnightblue">
+
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
     @if (User.HasClaim(claim => claim.Type == "AccountState" && claim.Value == "Approved")) {
         <i class="bi-check-circle"> Approved</i>
     } else if (User.HasClaim(claim => claim.Type == "AccountState" && claim.Value == "Pending")) {
         <i class="bi-clock"> Pending</i>
     } else if (User.HasClaim(claim => claim.Type == "AccountState" && claim.Value == "Rejected")) {
         <i class="bi-exclamation-circle"> Rejected</i>
+    } else {
+        <i class="bi-exclamation-circle"> Default</i>
     }
 }
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User)) {
+    @if (SignInManager.IsSignedIn(User))
+    {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
             <a class="nav-link text-dark" asp-page="/Profile" asp-route-id="@User.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value" title="Profile">Hello @User.Identity.Name!</a>
@@ -24,14 +32,8 @@
             </form>
         </li>
     } else {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/RegisterCustomer">Register Customer</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/RegisterModel">Register Model</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
+        <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/RegisterCustomer">Register Customer</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/RegisterModel">Register Model</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     }
 </ul>

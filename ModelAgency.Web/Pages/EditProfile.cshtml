@@ -19,12 +19,16 @@
     </form>
 
 @foreach(var photo in Model.modelUser.Photos) {
-                <img src="@photo.Path"/>
-                <form method="post" asp-page-handler="delete" asp-route-id="@Model.modelUser.Id">
-                    <input type="hidden" name="photoid" value="@photo.Id"/>
-                    <button type="submit" class="btn btn-primary">Delete</button>
-                </form>
-            }
+    <div>
+        <img src="@photo.Path" />
+        <form method="post" asp-page-handler="delete" asp-route-id="@Model.modelUser.Id">
+            <input type="hidden" name="photoid" value="@photo.Id" />
+            <button type="submit" class="btn btn-primary">Delete</button>
+        </form>
+
+    </div>
+}
+
 <form method="post" asp-page-handler="addPhotos" asp-route-id="@Model.modelUser.Id" enctype="multipart/form-data">
     <div class="form-group">
         <input type="file" name="photos" multiple class="form-control"/>
